@@ -1,0 +1,62 @@
+(window.ZH_TIERS = window.ZH_TIERS || []).push(
+{
+  id: "zh3", name: "历史常用", desc: "出自史书与典故，带着一段历史语境",
+  words: [
+    ["卧薪尝胆","wò xīn cháng dǎn"],["破釜沉舟","pò fǔ chén zhōu"],["负荆请罪","fù jīng qǐng zuì"],
+    ["指鹿为马","zhǐ lù wéi mǎ"],["图穷匕见","tú qióng bǐ xiàn"],["完璧归赵","wán bì guī zhào"],
+    ["纸上谈兵","zhǐ shàng tán bīng"],["四面楚歌","sì miàn chǔ gē"],["背水一战","bèi shuǐ yī zhàn"],
+    ["草木皆兵","cǎo mù jiē bīng"],["风声鹤唳","fēng shēng hè lì"],["望梅止渴","wàng méi zhǐ kě"],
+    ["三顾茅庐","sān gù máo lú"],["初出茅庐","chū chū máo lú"],["七擒七纵","qī qín qī zòng"],
+    ["闻鸡起舞","wén jī qǐ wǔ"],["投笔从戎","tóu bǐ cóng róng"],["精忠报国","jīng zhōng bào guó"],
+    ["舍生取义","shě shēng qǔ yì"],["杀身成仁","shā shēn chéng rén"],["鞠躬尽瘁","jū gōng jìn cuì"],
+    ["死而后已","sǐ ér hòu yǐ"],["呕心沥血","ǒu xīn lì xuè"],["披荆斩棘","pī jīng zhǎn jí"],
+    ["厉兵秣马","lì bīng mò mǎ"],["忍辱负重","rěn rǔ fù zhòng"],["悬梁刺股","xuán liáng cì gǔ"],
+    ["凿壁偷光","záo bì tōu guāng"],["囊萤映雪","náng yíng yìng xuě"],["程门立雪","chéng mén lì xuě"],
+    ["三令五申","sān lìng wǔ shēn"],["一鼓作气","yī gǔ zuò qì"],["退避三舍","tuì bì sān shè"],
+    ["约法三章","yuē fǎ sān zhāng"],["唇亡齿寒","chún wáng chǐ hán"],["假道伐虢","jiǎ dào fá guó"],
+    ["尔虞我诈","ěr yú wǒ zhà"],["朝秦暮楚","zhāo qín mù chǔ"],["合纵连横","hé zòng lián héng"],
+    ["围魏救赵","wéi wèi jiù zhào"],["焚书坑儒","fén shū kēng rú"],["揭竿而起","jiē gān ér qǐ"],
+    ["楚河汉界","chǔ hé hàn jiè"],["项庄舞剑","xiàng zhuāng wǔ jiàn"],["草船借箭","cǎo chuán jiè jiàn"],
+    ["火烧赤壁","huǒ shāo chì bì"],["单刀赴会","dān dāo fù huì"],["乐不思蜀","lè bù sī shǔ"],
+    ["七步成诗","qī bù chéng shī"],["背井离乡","bèi jǐng lí xiāng"],["流离失所","liú lí shī suǒ"],
+    ["民不聊生","mín bù liáo shēng"],["生灵涂炭","shēng líng tú tàn"],["国破家亡","guó pò jiā wáng"],
+    ["天下太平","tiān xià tài píng"],["长治久安","cháng zhì jiǔ ān"],["居安思危","jū ān sī wēi"],
+    ["休养生息","xiū yǎng shēng xī"],["路不拾遗","lù bù shí yí"],["夜不闭户","yè bù bì hù"],
+    ["改朝换代","gǎi cháo huàn dài"],["成王败寇","chéng wáng bài kòu"],["运筹帷幄","yùn chóu wéi wò"],
+    ["决胜千里","jué shèng qiān lǐ"],["出奇制胜","chū qí zhì shèng"],["声东击西","shēng dōng jī xī"],
+    ["知己知彼","zhī jǐ zhī bǐ"],["百战百胜","bǎi zhàn bǎi shèng"],["兵不厌诈","bīng bù yàn zhà"],
+    ["师出有名","shī chū yǒu míng"],["先礼后兵","xiān lǐ hòu bīng"],["养精蓄锐","yǎng jīng xù ruì"],
+    ["势如破竹","shì rú pò zhú"],["所向披靡","suǒ xiàng pī mǐ"],["闻风丧胆","wén fēng sàng dǎn"],
+    ["溃不成军","kuì bù chéng jūn"],["兵荒马乱","bīng huāng mǎ luàn"],["金戈铁马","jīn gē tiě mǎ"],
+    ["烽火连天","fēng huǒ lián tiān"],["狼烟四起","láng yān sì qǐ"],["一统天下","yī tǒng tiān xià"],
+    ["割据一方","gē jù yī fāng"],["励精图治","lì jīng tú zhì"],["开疆拓土","kāi jiāng tuò tǔ"],
+    ["国泰民安","guó tài mín ān"],["丰衣足食","fēng yī zú shí"],["安居乐业","ān jū lè yè"],
+    ["太平盛世","tài píng shèng shì"],["明察秋毫","míng chá qiū háo"],["铁面无私","tiě miàn wú sī"],
+    ["刚正不阿","gāng zhèng bù ē"],["两袖清风","liǎng xiù qīng fēng"],["高风亮节","gāo fēng liàng jié"]
+  ]
+},
+{
+  id: "zh4", name: "生僻挑战", desc: "认识但不一定读得准、打得出——专治冷僻字",
+  words: [
+    ["茕茕孑立","qióng qióng jié lì"],["沆瀣一气","hàng xiè yī qì"],["焚膏继晷","fén gāo jì guǐ"],
+    ["宵衣旰食","xiāo yī gàn shí"],["栉风沐雨","zhì fēng mù yǔ"],["暴殄天物","bào tiǎn tiān wù"],
+    ["觥筹交错","gōng chóu jiāo cuò"],["耄耋之年","mào dié zhī nián"],["饕餮之徒","tāo tiè zhī tú"],
+    ["魑魅魍魉","chī mèi wǎng liǎng"],["踽踽独行","jǔ jǔ dú xíng"],["孑然一身","jié rán yī shēn"],
+    ["鳞次栉比","lín cì zhì bǐ"],["擢发难数","zhuó fà nán shǔ"],["罄竹难书","qìng zhú nán shū"],
+    ["醍醐灌顶","tí hú guàn dǐng"],["飞扬跋扈","fēi yáng bá hù"],["颐指气使","yí zhǐ qì shǐ"],
+    ["颐养天年","yí yǎng tiān nián"],["恪尽职守","kè jìn zhí shǒu"],["刚愎自用","gāng bì zì yòng"],
+    ["怙恶不悛","hù è bù quān"],["恬不知耻","tián bù zhī chǐ"],["纨绔子弟","wán kù zǐ dì"],
+    ["斑驳陆离","bān bó lù lí"],["蹉跎岁月","cuō tuó suì yuè"],["踌躇满志","chóu chú mǎn zhì"],
+    ["踌躇不前","chóu chú bù qián"],["龃龉不合","jǔ yǔ bù hé"],["期颐之年","qī yí zhī nián"],
+    ["螳臂当车","táng bì dāng chē"],["蚍蜉撼树","pí fú hàn shù"],["鹑衣百结","chún yī bǎi jié"],
+    ["筚路蓝缕","bì lù lán lǚ"],["卖官鬻爵","mài guān yù jué"],["纸醉金迷","zhǐ zuì jīn mí"],
+    ["酩酊大醉","mǐng dǐng dà zuì"],["鹬蚌相争","yù bàng xiāng zhēng"],["螟蛉之子","míng líng zhī zǐ"],
+    ["睚眦必报","yá zì bì bào"],["舐犊情深","shì dú qíng shēn"],["老骥伏枥","lǎo jì fú lì"],
+    ["披肝沥胆","pī gān lì dǎn"],["殚精竭虑","dān jīng jié lǜ"],["箪食瓢饮","dān sì piáo yǐn"],
+    ["缱绻缠绵","qiǎn quǎn chán mián"],["旖旎风光","yǐ nǐ fēng guāng"],["杳无音信","yǎo wú yīn xìn"],
+    ["缄默不语","jiān mò bù yǔ"],["瞠目结舌","chēng mù jié shé"],["咄咄逼人","duō duō bī rén"],
+    ["喋喋不休","dié dié bù xiū"],["纡尊降贵","yū zūn jiàng guì"],["鳏寡孤独","guān guǎ gū dú"],
+    ["瓮牖绳枢","wèng yǒu shéng shū"],["拾人牙慧","shí rén yá huì"],["数典忘祖","shǔ diǎn wàng zǔ"]
+  ]
+}
+);

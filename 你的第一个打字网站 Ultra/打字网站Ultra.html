@@ -1,0 +1,1628 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>你的第一个打字网站 Ultra</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#232c38;--txt:#e6edf3;--dim:#8b949e;
+--acc:#3fb950;--acc2:#7ee787;--amber:#f0b429;--red:#f85149;--blue:#58a6ff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(1200px 620px at 50% -12%,#16202b 0%,var(--bg) 62%);color:var(--txt);
+font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.hidden{display:none!important}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 22px 46px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:4px 0 24px}
+.brand{display:flex;align-items:center;gap:9px;font-size:14.5px;font-weight:600;letter-spacing:.04em;color:var(--dim)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--acc2);box-shadow:0 0 12px var(--acc2)}
+.tabs{display:flex;gap:4px;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:13px}
+.tab{border:0;background:transparent;color:var(--dim);padding:8px 18px;border-radius:9px;font-size:14px;cursor:pointer;font-family:inherit;transition:.15s}
+.tab.on{background:#22303f;color:var(--txt);box-shadow:inset 0 0 0 1px #2d3d4f}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--dim);font-size:17px;cursor:pointer}
+.iconbtn:hover{color:var(--txt);border-color:#33506d}
+.lede{margin:2px 0 18px;color:var(--dim);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{text-align:left;background:linear-gradient(180deg,#171e27,#141a21);border:1px solid var(--line);
+border-radius:16px;padding:16px 17px 15px;color:inherit;cursor:pointer;font-family:inherit;transition:.16s}
+.card:hover{border-color:#33506d;transform:translateY(-2px);box-shadow:0 14px 34px -22px #000}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cname{font-size:17px;font-weight:600}
+.pill{font-size:11.5px;color:var(--dim);border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.cdesc{margin:7px 0 12px;font-size:12.5px;color:var(--dim);line-height:1.55;min-height:36px}
+.cmeta{display:flex;justify-content:space-between;font-size:12px;color:#6e7681;margin-bottom:8px}
+.track{height:6px;background:#1b222b;border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2ea043,var(--acc2));border-radius:99px;transition:width .25s}
+.track.big{height:8px;margin:4px 0 16px}
+.foot{margin-top:26px;color:#5b6470;font-size:12px;text-align:center}
+/* play */
+.playbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ptitle{display:flex;align-items:center;gap:10px;font-size:14px}
+.ptitle b{font-weight:600}
+.ptitle span{color:var(--dim);font-size:12.5px}
+.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+.hud>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:1px}
+.hud b{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.hud span{font-size:11px;color:var(--dim)}
+.stage{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:26px 8px 18px}
+.word{display:flex;flex-wrap:wrap;justify-content:center;gap:30px;row-gap:6px}
+.syl{display:flex;flex-direction:column;align-items:center;gap:7px}
+.hz{font-family:"KaiTi","STKaiti","楷体",serif;font-size:calc(88px * var(--k,1));line-height:1;color:#2b3542;transition:color .18s,text-shadow .18s}
+.syl.on .hz{color:var(--acc2);text-shadow:0 0 30px rgba(126,231,135,.22)}
+.py{display:flex;gap:1px}
+.lt{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:calc(25px * var(--k,1));line-height:1;color:#49535f;transition:color .07s,background .07s;padding:1px 0}
+.lt.en{font-size:calc(54px * var(--k,1));color:#3f4a57;padding:0 1px;line-height:1.02}
+.lt.done{color:var(--acc2)}
+.lt.cur{color:#0d1117;background:var(--amber);border-radius:5px;box-shadow:0 0 22px rgba(240,180,41,.35)}
+.lt.bad{color:var(--red)!important;background:transparent!important;box-shadow:none!important;animation:shake .22s}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.hidepy .py{visibility:hidden}
+.word.won{animation:pop .32s ease-out}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.025)}100%{transform:scale(1)}}
+.meta{display:flex;align-items:center;gap:14px;min-height:24px;font-size:14px;color:#6e7681}
+.meta .ipa{color:var(--blue);font-family:"Cascadia Mono",Consolas,monospace;font-size:15px}
+.meta .mean{color:#9aa4b1}
+.hintline{font-size:12.5px;color:#5b6470}
+.actions{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.ghost{background:var(--panel);border:1px solid var(--line);color:var(--dim);border-radius:11px;padding:9px 15px;font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+.ghost:hover{color:var(--txt);border-color:#33506d}
+.ghost.wide{width:100%;margin-top:14px}
+kbd{font-family:inherit;font-size:11px;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:#8b949e;margin-left:4px}
+/* drawer */
+.drawer{position:fixed;inset:0 0 0 auto;width:min(372px,94vw);background:#111821;border-left:1px solid var(--line);
+z-index:50;padding:20px 22px;overflow:auto;box-shadow:-20px 0 60px -30px #000}
+.drawerHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.drawerHead b{font-size:16px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #1c242e;font-size:13.5px;color:#c9d1d9;cursor:pointer}
+.sw input{accent-color:var(--acc);width:16px;height:16px}
+.field{display:flex;flex-direction:column;gap:7px;padding:13px 0;border-bottom:1px solid #1c242e;font-size:13px;color:#c9d1d9}
+.field>span{display:flex;justify-content:space-between;color:#9aa4b1}
+.field em{color:var(--amber);font-style:normal;font-variant-numeric:tabular-nums}
+.field select,.field input[type=range]{width:100%;background:#0f151c;border:1px solid var(--line);color:var(--txt);
+border-radius:9px;padding:8px 9px;font-family:inherit;font-size:13px}
+.field input[type=range]{padding:0;border:0;accent-color:var(--acc)}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(6,9,13,.72);display:grid;place-items:center;z-index:70;padding:18px;backdrop-filter:blur(3px)}
+.modal .card{width:min(520px,100%);cursor:default;background:#141b23;padding:24px}
+.modal h2{margin:0 0 18px;font-size:19px;font-weight:600}
+.res{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.res>div{background:#0f151c;border:1px solid var(--line);border-radius:11px;padding:11px;text-align:center}
+.res b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.res span{font-size:11px;color:var(--dim)}
+.wrong{font-size:13px;color:#9aa4b1;line-height:1.8;max-height:120px;overflow:auto;margin-bottom:18px}
+.wrong i{font-style:normal;color:var(--red)}
+.modal .row{gap:10px}
+.primary{background:linear-gradient(180deg,#2ea043,#238636);border:1px solid #2ea043;color:#fff;border-radius:11px;
+padding:10px 18px;font-size:13.5px;cursor:pointer;font-family:inherit;font-weight:600;flex:1}
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);background:#1d2733;border:1px solid #33465c;
+color:#e6edf3;padding:11px 17px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;
+max-width:min(560px,86vw);font-size:13px;line-height:1.55;z-index:80;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+/* 自定义词库 / 文章 */
+.article{width:100%;max-width:860px;max-height:38vh;overflow:auto;white-space:pre-wrap;word-break:break-word;
+ font-size:calc(27px * var(--k,1));line-height:2;letter-spacing:.01em;padding:8px 6px}
+.article.zh{font-family:"KaiTi","STKaiti","楷体",serif}
+.article.en{font-family:"Cascadia Mono",Consolas,monospace;font-size:calc(20px * var(--k,1));line-height:2.1;letter-spacing:0}
+.article.big{font-size:calc(64px * var(--k,1));line-height:1.6;text-align:center;max-height:none;white-space:normal}
+.article.big.en{font-size:calc(44px * var(--k,1))}
+.article.won{animation:pop .32s ease-out}
+.ac{color:#414b57;transition:color .08s,background .08s}
+.ac.done{color:var(--acc2)}
+.ac.cur{background:var(--amber);color:#0d1117;border-radius:3px;box-shadow:0 0 0 2px rgba(240,180,41,.18)}
+.ac.bad{color:var(--red);text-decoration:underline wavy var(--red)}
+.imebox{width:100%;max-width:640px;background:#0f151c;border:1px solid var(--line);color:var(--txt);
+ border-radius:12px;padding:11px 14px;font-size:19px;font-family:inherit;outline:none;text-align:center}
+.imebox:focus{border-color:#3f6a94;box-shadow:0 0 0 3px rgba(88,166,255,.12)}
+.imebox::placeholder{color:#4b5563}
+.card.add{border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:132px;
+ color:#6e7681;font-size:14px;background:transparent}
+.card.add:hover{color:var(--acc2);border-color:#2f6a4a}
+.card .del{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:8px;border:1px solid transparent;
+ background:transparent;color:#4b5563;cursor:pointer;font-size:16px;line-height:1;font-family:inherit}
+.card .del:hover{color:var(--red);border-color:#3a2a2a;background:#1a1416}
+.importcard{width:min(620px,100%)}
+.importcard textarea,.importcard input[type=text]{width:100%;background:#0f151c;border:1px solid var(--line);
+ color:var(--txt);border-radius:9px;padding:9px 10px;font-family:inherit;font-size:13.5px;line-height:1.7;
+ resize:vertical;outline:none}
+.importcard input[type=text]{resize:none}
+.improw{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid #1c242e}
+.filebtn{display:inline-flex;align-items:center;cursor:pointer}
+.mini{background:#0f151c;border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:8px 9px;font-family:inherit;font-size:12.5px}
+.imphint{min-height:20px;margin:10px 0 14px;font-size:12.5px;color:#7ee787;line-height:1.6}
+
+html[data-theme="light"]{--bg:#f3f5f9;--panel:#fff;--line:#d9e1ea;--txt:#1b2430;--dim:#5a6676;--acc:#1a7f37;--acc2:#1a7f37;--amber:#a86400;--red:#c62828;--blue:#0b62d6;color-scheme:light}
+html[data-theme="light"] body{background:#f3f5f9}
+html[data-theme="light"] .card{background:#fff;border-color:#d9e1ea}
+html[data-theme="light"] .card:hover{border-color:#9db2c9}
+html[data-theme="light"] .hud>div,html[data-theme="light"] .res>div{background:#fff;border-color:#d9e1ea}
+html[data-theme="light"] .track{background:#e6ecf3}
+html[data-theme="light"] .hz{color:#c6cfda}
+html[data-theme="light"] .syl.on .hz{color:#1a7f37;text-shadow:none}
+html[data-theme="light"] .lt{color:#9aa6b4}
+html[data-theme="light"] .lt.done,html[data-theme="light"] .ac.done{color:#1a7f37}
+html[data-theme="light"] .lt.en{color:#a8b4c2}
+html[data-theme="light"] .lt.cur,html[data-theme="light"] .ac.cur{background:#a86400;color:#fff}
+html[data-theme="light"] .ac{color:#a9b5c2}
+html[data-theme="light"] .drawer{background:#fff;box-shadow:-20px 0 60px -30px rgba(15,30,50,.25)}
+html[data-theme="light"] .modal{background:rgba(25,35,50,.35)}
+html[data-theme="light"] .modal .card{background:#fff}
+html[data-theme="light"] .importcard textarea,html[data-theme="light"] .importcard input[type=text],html[data-theme="light"] .field select,html[data-theme="light"] .mini{background:#f7f9fc;color:#1b2430}
+html[data-theme="light"] .imebox{background:#fff;color:#1b2430}
+html[data-theme="light"] #toast{background:#fff;border-color:#d9e1ea;color:#1b2430}
+html[data-theme="light"] .tab.on{background:#e8eef7;color:#1b2430;box-shadow:inset 0 0 0 1px #cfdbe9}
+html[data-theme="light"] .ghost,html[data-theme="light"] .iconbtn{background:#fff}
+html[data-theme="light"] .sw,html[data-theme="light"] .field{border-color:#eef2f7}
+html[data-theme="light"] .hintline,html[data-theme="light"] .cdesc,html[data-theme="light"] .cmeta{color:#5a6676}
+html[data-theme="light"] .card.add{color:#5a6676}
+
+@media(max-width:680px){
+ .wrap{padding:16px 14px 40px}
+ .hz{font-size:calc(56px * var(--k,1))}.lt{font-size:calc(18px * var(--k,1))}.lt.en{font-size:calc(34px * var(--k,1))}
+ .word{gap:16px}.stage{min-height:210px}
+ .hud{grid-template-columns:repeat(2,1fr)}
+ .res{grid-template-columns:repeat(2,1fr)}
+ .tabs .tab{padding:7px 12px;font-size:13px}
+}
+@media(max-width:520px){
+ header{gap:10px;flex-wrap:nowrap}
+ .bname{display:none}
+ .hz{font-size:calc(48px * var(--k,1))}.lt{font-size:calc(16px * var(--k,1))}.lt.en{font-size:calc(30px * var(--k,1))}
+ .word{gap:11px}.stage{padding:18px 2px 12px}
+ .iconbtn{width:36px;height:36px;font-size:15px}
+ .playbar .ghost{padding:8px 11px;font-size:12px}
+ .hud b{font-size:17px}
+ .actions .ghost{padding:8px 11px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="dot"></span><span class="bname">你的第一个打字网站 Ultra</span></div>
+    <div class="tabs" id="modeTabs">
+      <button class="tab on" data-m="zh">成语</button>
+      <button class="tab" data-m="en">单词</button>
+      <button class="tab" data-m="random">随机字</button>
+      <button class="tab" data-m="article">文章</button>
+      <button class="tab" data-m="novel">小说</button>
+    </div>
+    <button class="iconbtn" id="openSet" title="设置">⚙</button>
+  </header>
+
+  <main id="home">
+    <p class="lede" id="lede">选一档开始 · 每题先读一遍，再打字 · 空格会自动跳过</p>
+    <div class="grid" id="grid"></div>
+    <p class="foot">进度只保存在本机浏览器 · 双击即可离线使用</p>
+  </main>
+
+  <main id="play" class="hidden">
+    <div class="playbar">
+      <button class="ghost" id="back">← 返回</button>
+      <div class="ptitle"><b id="tierName">—</b><span id="progText"></span></div>
+      <button class="ghost" id="skip">跳过</button>
+    </div>
+    <div class="hud">
+      <div><b id="hSpeed">0</b><span>键 / 分</span></div>
+      <div><b id="hAcc">100</b><span>正确率 %</span></div>
+      <div><b id="hCombo">0</b><span>连击（词）</span></div>
+      <div><b id="hTime">0:00</b><span>用时</span></div>
+    </div>
+    <div class="stage" id="stage">
+      <div class="word" id="wordBox"></div>
+      <div class="article" id="articleBox" hidden></div>
+      <div class="meta" id="metaBox"></div>
+      <input id="imeBox" class="imebox" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="点这里，用输入法打字…" hidden>
+    </div>
+    <div class="track big"><i id="bar"></i></div>
+    <div class="actions" id="actions">
+      <button class="ghost" id="replay">🔊 重听<kbd>Enter</kbd></button>
+      <button class="ghost" id="togglePy">隐藏拼音</button>
+    </div>
+  </main>
+</div>
+
+<aside id="setPanel" class="drawer hidden">
+  <div class="drawerHead"><b>设置</b><button class="iconbtn" id="closeSet">✕</button></div>
+  <label class="sw"><span>完成音效</span><input type="checkbox" id="setSound"></label>
+  <label class="sw"><span>语音朗读（每题先读）</span><input type="checkbox" id="setVoice"></label>
+  <label class="sw"><span>显示拼音（中文）</span><input type="checkbox" id="setPinyin"></label>
+  <label class="sw"><span>只练未掌握的词</span><input type="checkbox" id="setOnlyNew"></label>
+  <div class="field"><span>语速 <em id="rateVal">0.95</em></span><input type="range" id="setRate" min="0.6" max="1.3" step="0.05"></div>
+  <div class="field"><span>字号 <em id="fontVal">1.00</em></span><input type="range" id="setFont" min="0.8" max="1.8" step="0.05"></div>
+  <label class="sw"><span>浅色模式</span><input type="checkbox" id="setTheme"></label>
+  <div class="field" id="orientField"><span>屏幕方向</span>
+    <select id="setOrient">
+      <option value="landscape">横屏</option><option value="portrait">竖屏</option><option value="auto">跟随系统</option>
+    </select>
+  </div>
+  <div class="field"><span>背景音乐 <em id="bgmName">未选择</em></span>
+    <input type="range" id="bgmVol" min="0" max="1" step="0.05">
+    <div class="improw" style="border:0;padding:8px 0 0">
+      <label class="ghost filebtn">选择音乐<input id="bgmFile" type="file" accept="audio/*" hidden></label>
+      <label class="sw" style="border:0;padding:0"><span>播放</span><input type="checkbox" id="bgmOn"></label>
+    </div>
+  </div>
+  <div class="field"><span>每 <em id="groupVal">20</em> 词结算一次</span>
+    <input type="range" id="setGroup" min="10" max="200" step="10">
+  </div>
+  <div class="field"><span>出题顺序</span>
+    <select id="setOrder"><option value="seq">顺序</option><option value="random">随机</option></select>
+  </div>
+  <div class="field"><span>朗读音色</span><select id="setVoiceSel"></select></div>
+  <button class="ghost wide" id="resetAll">清空所有练习记录</button>
+</aside>
+
+<div id="modal" class="modal hidden">
+  <div class="card">
+    <h2 id="mTitle">本组完成</h2>
+    <div class="res">
+      <div><b id="rSpeed">0</b><span>键/分</span></div>
+      <div><b id="rAcc">0</b><span>正确率 %</span></div>
+      <div><b id="rCombo">0</b><span>最高连击</span></div>
+      <div><b id="rTime">0:00</b><span>用时</span></div>
+    </div>
+    <div class="wrong" id="rWrong"></div>
+    <div class="row">
+      <button class="primary" id="again">再来一组</button>
+      <button class="ghost" id="toHome">回首页</button>
+    </div>
+  </div>
+</div>
+
+<div id="importModal" class="modal hidden">
+  <div class="card importcard">
+    <h2>导入我的词库</h2>
+    <label class="field"><span>名称</span><input id="impName" type="text" maxlength="20" placeholder="给这组词起个名字"></label>
+    <label class="field"><span>内容</span>
+      <textarea id="impText" rows="7" placeholder="词组：一行一个，可写「成语|hú jiǎ hǔ wèi」或「word|音标|释义」&#10;文章：直接粘贴整段文字"></textarea>
+    </label>
+    <div class="improw">
+      <label class="ghost filebtn">选择 .txt 文件<input id="impFile" type="file" accept=".txt,.md,text/plain" hidden></label>
+      <select id="impKind" class="mini">
+        <option value="auto">自动判断类型</option><option value="word">词组</option><option value="article">文章</option><option value="chars">字（随机字池）</option>
+      </select>
+      <select id="impLang" class="mini">
+        <option value="auto">自动识别语言</option><option value="zh">中文</option><option value="en">英文</option>
+      </select>
+    </div>
+    <p class="imphint" id="impHint"></p>
+    <div class="row">
+      <button class="ghost" id="impCancel">取消</button>
+      <button class="primary" id="impSave">导入</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<pre id="selftest" hidden></pre>
+
+<script src="data/zh-a.js"></script>
+<script src="data/zh-b.js"></script>
+<script src="data/en-primary.js"></script>
+<script src="data/en-junior.js"></script>
+<script src="data/en-senior.js"></script>
+<script src="data/en-university.js"></script>
+<script src="data/en-b.js"></script>
+<script src="data/read-meta.js"></script>
+<script src="data/read-py.js"></script>
+<script>
+"use strict";
+/* ---------- 基础 ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const LS = "zjtyping.v1";
+const DEF = { sound: true, voice: true, pinyin: true, onlyNew: false, rate: 0.95, group: 20, order: "seq", voiceName: "", fontScale: 1, theme: "dark", orientation: "landscape", musicVol: 0.3, musicOn: false, musicData: "", musicName: "" };
+let DB = loadDB();
+function validCustom(c) {
+  if (!c || typeof c !== "object" || !c.id) return false;
+  if (c.kind === "article") return typeof c.text === "string" && c.text.length > 0;
+  return Array.isArray(c.words) && c.words.length > 0;
+}
+const __drop = DB.custom.length - (DB.custom = (DB.custom || []).filter(validCustom)).length;
+if (__drop > 0) saveDB();
+
+function loadDB() {
+  let o = null;
+  try { o = JSON.parse(localStorage.getItem(LS)); } catch (e) {}
+  if (!o || typeof o !== "object") return { v: 1, s: { ...DEF }, p: {}, custom: [], chars: [] };
+  return {
+    v: 1, s: { ...DEF, ...(o.s || {}) },
+    p: o.p && typeof o.p === "object" ? o.p : {},
+    custom: Array.isArray(o.custom) ? o.custom : [],
+    chars: Array.isArray(o.chars) ? o.chars : []
+  };
+}
+function saveDB() { try { localStorage.setItem(LS, JSON.stringify(DB)); } catch (e) {} }
+
+const ACC = "āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüńňǹḿ";
+const BAS = "aaaaeeeeiiiioooouuuuvvvvvnnnm";
+function toAscii(s) {
+  let o = "";
+  for (const ch of s) { const i = ACC.indexOf(ch); o += i >= 0 ? BAS[i] : ch; }
+  return o.toLowerCase();
+}
+function step(target, idx, ch) {
+  while (idx < target.length && target[idx] === " ") idx++;
+  if (ch === " ") return { idx, ok: true };
+  if (idx >= target.length) return { idx, ok: true, finished: true };
+  if (target[idx] === ch) return { idx: idx + 1, ok: true };
+  return { idx, ok: false };
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmtTime = ms => { const s = Math.floor(ms / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+
+/* ---------- 状态 ---------- */
+const S = {
+  mode: "zh", lang: "zh", screen: "home", tier: null, queue: [], qi: 0,
+  item: null, target: "", cells: [], idx: 0, curErrs: 0,
+  started: false, t0: 0, elapsed: 0, timer: null,
+  correct: 0, errors: 0, combo: 0, maxCombo: 0, wrongSet: [], done: false, doneTimer: null
+};
+const tiersOf = m => ((m === "zh" ? window.ZH_TIERS : window.EN_TIERS) || []);
+function allTiers(m) {
+  const base = tiersOf(m).map(t => ({ lang: m, ...t }));
+  const extra = (DB.custom || []).filter(c => c.lang === m && validCustom(c)).map(c => c.kind === "article"
+    ? { id: c.id, name: c.name, kind: "article", lang: c.lang, text: c.text, custom: true, desc: "自定义文章 · " + c.text.length + " 字" }
+    : { id: c.id, name: c.name, kind: "word", lang: c.lang, words: c.words, input: c.input, custom: true, desc: "自定义 · " + c.words.length + " 条 · " + (c.input === "ime" ? "输入法" : "逐字母") });
+  return base.concat(extra);
+}
+
+/* ---------- 声音 ---------- */
+let AC = null, voices = [];
+function beep(ok) {
+  if (!DB.s.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === "suspended") AC.resume();
+    const t = AC.currentTime;
+    const seq = ok ? [[880, 0, .1, "sine"], [1318.5, .075, .19, "sine"]] : [[150, 0, .09, "square"]];
+    for (const [f, dt, dur, type] of seq) {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(.0001, t + dt);
+      g.gain.exponentialRampToValueAtTime(ok ? .16 : .1, t + dt + .012);
+      g.gain.exponentialRampToValueAtTime(.0001, t + dt + dur);
+      o.connect(g); g.connect(AC.destination);
+      o.start(t + dt); o.stop(t + dt + dur + .04);
+    }
+  } catch (e) {}
+}
+function refreshVoices() {
+  if (!("speechSynthesis" in window)) return;
+  voices = speechSynthesis.getVoices() || [];
+  const sel = $("#setVoiceSel"); if (!sel) return;
+  const cur = DB.s.voiceName || "";
+  sel.innerHTML = '<option value="">自动选择（推荐）</option>' +
+    voices.map(v => `<option value="${esc(v.name)}">${esc(v.name)} · ${esc(v.lang)}</option>`).join("");
+  sel.value = cur;
+}
+function pickVoice(lang) {
+  const pre = lang.slice(0, 2).toLowerCase();
+  const pool = voices.filter(v => (v.lang || "").toLowerCase().startsWith(pre));
+  if (!pool.length) return null;
+  if (DB.s.voiceName) { const m = pool.find(v => v.name === DB.s.voiceName); if (m) return m; }
+  const pref = ["xiaoxiao", "huihui", "yaoyao", "yunxi", "kangkang", "tingting", "jenny", "aria", "zira", "david", "mark", "samantha"];
+  for (const p of pref) { const m = pool.find(v => v.name.toLowerCase().includes(p)); if (m) return m; }
+  return pool[0];
+}
+let warnedZh = false, zhVoiceTries = 0;
+function ensureZhVoice() {
+  if (!("speechSynthesis" in window)) { toast("这个浏览器不支持语音朗读"); return; }
+  if (!voices.length) {
+    refreshVoices();
+    if (!voices.length && zhVoiceTries++ < 3) { setTimeout(ensureZhVoice, 500); return; }
+  }
+  if (!voices.some(v => /^zh/i.test(v.lang || "")) && !warnedZh) {
+    warnedZh = true;
+    toast("系统里没有中文语音包，成语暂时不会发声。可在「Windows 设置 → 时间和语言 → 语音」添加中文语音，重启浏览器后再试。");
+  }
+}
+/* 单例语音控制器：一次只放一条；要换词时先 cancel、延时再 speak，
+   避免 Chromium 上 cancel() 紧跟 speak() 丢音；并持有引用直到 onend，避免被 GC。 */
+const TTS = { cur: null, seq: 0 };
+function ttsFail() {
+  if (warnedZh) return;
+  warnedZh = true;
+  toast("语音没有响应：可能系统缺中文语音包，或浏览器拦截了播放。可先点「重听」，或在设置里关掉朗读。");
+}
+function say(text, lang) {
+  if (!DB.s.voice || !("speechSynthesis" in window)) return;
+  if (!voices.length) refreshVoices();
+  const my = ++TTS.seq;
+  const fire = () => {
+    if (my !== TTS.seq || !("speechSynthesis" in window)) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = DB.s.rate; u.pitch = 1;
+    const v = pickVoice(lang); if (v) u.voice = v;
+    let started = false;
+    u.onstart = () => { started = true; };
+    u.onend = u.onerror = () => { if (TTS.cur === u) TTS.cur = null; };
+    TTS.cur = u;
+    try { speechSynthesis.speak(u); } catch (e) { TTS.cur = null; return; }
+    setTimeout(() => { if (!started && TTS.cur === u) ttsFail(); }, 1800);
+  };
+  if (TTS.cur || speechSynthesis.speaking || speechSynthesis.pending) {
+    if (TTS.cur) { TTS.cur.onend = TTS.cur.onerror = null; TTS.cur = null; }
+    speechSynthesis.cancel();
+    setTimeout(fire, 100);
+  } else {
+    if (speechSynthesis.paused) speechSynthesis.resume();
+    fire();
+  }
+}
+function stopSay() {
+  TTS.seq++;
+  if (TTS.cur) { TTS.cur.onend = TTS.cur.onerror = null; TTS.cur = null; }
+  if ("speechSynthesis" in window) { try { speechSynthesis.cancel(); } catch (e) {} }
+}
+
+/* ---------- 界面 ---------- */
+let toastTimer = null;
+function toast(msg, ms = 3600) {
+  const el = $("#toast"); el.textContent = msg; el.classList.add("on");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("on"), ms);
+}
+function show(name) {
+  S.screen = name;
+  $("#home").classList.toggle("hidden", name !== "home");
+  $("#play").classList.toggle("hidden", name !== "play");
+}
+function masteredCount(t) {
+  const p = DB.p[t.id] || {};
+  const w = p.words || {};
+  return t.words.reduce((n, x) => n + ((w[x[0]] || 0) >= 2 ? 1 : 0), 0);
+}
+function renderHome() {
+  if (S.mode === "random") return renderRandomHome();
+  if (S.mode === "article" || S.mode === "novel") return renderReadHome(S.mode);
+  $("#lede").textContent = S.mode === "zh"
+    ? "选一档开始 · 每题先读一遍再打字 · 空格会自动跳过"
+    : "选一档开始 · 每题先读一遍再打字 · 顺序从上次停下的地方继续";
+  const list = allTiers(S.mode);
+  let cards = "";
+  try {
+    cards = list.map(t => {
+    const p = DB.p[t.id] || {};
+    const del = t.custom ? `<button class="del" data-del="${t.id}" title="删除">×</button>` : "";
+    if (t.kind === "article") {
+      return `<div class="card" data-id="${t.id}">
+        <div class="row"><span class="cname">${esc(t.name)}</span><span class="pill">文章</span></div>
+        <div class="cdesc">${esc(t.desc)}</div>
+        <div class="cmeta"><span>${t.text.length} 字</span><span>最高 ${p.best || 0} 键/分</span></div>
+        ${del}
+      </div>`;
+    }
+    const m = masteredCount(t), total = t.words.length;
+    const pct = total ? Math.round(m / total * 100) : 0;
+    return `<div class="card" data-id="${t.id}">
+      <div class="row"><span class="cname">${esc(t.name)}</span><span class="pill">${total} 条</span></div>
+      <div class="cdesc">${esc(t.desc || "")}</div>
+      <div class="cmeta"><span>掌握 ${m}/${total}</span><span>最高 ${p.best || 0} 键/分</span></div>
+      <div class="track"><i style="width:${pct}%"></i></div>
+      ${del}
+    </div>`;
+    }).join("");
+  } catch (e) { cards = ""; }
+  $("#grid").innerHTML = cards + `<div class="card add" id="addCard">＋ 导入我的词库（词组 / 文章）</div>`;
+  $$("#grid [data-id]").forEach(b => b.addEventListener("click", () => startTier(b.dataset.id)));
+  $$("#grid .del").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); delCustom(b.dataset.del); }));
+  $("#addCard").addEventListener("click", openImport);
+}
+function charPinyinMap() {
+  if (window.__CPY) return window.__CPY;
+  const counts = new Map();
+  for (const t of tiersOf("zh")) for (const w of t.words) {
+    const chars = Array.from(w[0]), syls = (w[1] || "").trim().split(/\s+/);
+    if (chars.length !== syls.length) continue;
+    for (let i = 0; i < chars.length; i++) {
+      if (!/[\u4e00-\u9fff]/.test(chars[i])) continue;
+      if (!counts.has(chars[i])) counts.set(chars[i], new Map());
+      const m = counts.get(chars[i]);
+      m.set(syls[i], (m.get(syls[i]) || 0) + 1);
+    }
+  }
+  const out = new Map();
+  for (const [c, m] of counts) {
+    let best = "", n = -1;
+    for (const [p, k] of m) if (k > n) { best = p; n = k; }
+    out.set(c, best);
+  }
+  window.__CPY = out;
+  return out;
+}
+function renderReadHome(kind) {
+  const list = (window.READ_META || []).filter(r => r.kind === kind);
+  $("#lede").textContent = kind === "novel" ? "长篇小说 · 逐字朗读 · 自动记住进度" : "文章 · 打完自动接下一页";
+  $("#grid").innerHTML = list.map(r => {
+    const pr = (DB.read || {})[r.id] || {};
+    const pages = pr.pages || 1;
+    const pct = pr.page != null ? Math.round((pr.page + 1) / pages * 100) : 0;
+    return `<div class="card" data-read="${r.id}">
+      <div class="row"><span class="cname">${esc(r.name)}</span><span class="pill">${esc(r.author || "")}</span></div>
+      <div class="cdesc">${r.kind === "novel" ? "长篇小说" : "文章"} · ${(r.chars / 1000).toFixed(0)} 千字</div>
+      <div class="cmeta"><span>${pr.page != null ? ("上次：第 " + (pr.page + 1) + " 页") : "未开始"}</span><span>${pct}%</span></div>
+      <div class="track"><i style="width:${pct}%"></i></div>
+    </div>`;
+  }).join("");
+  $$("#grid [data-read]").forEach(b => b.addEventListener("click", () => openRead(b.dataset.read)));
+}
+function loadReadText(info, cb) {
+  const store = window.READ_TEXTS || {};
+  if (store[info.id]) return cb(store[info.id].text);
+  const s = document.createElement("script");
+  s.src = info.file;
+  s.onload = () => cb((window.READ_TEXTS[info.id] || {}).text || "");
+  s.onerror = () => toast("文本加载失败");
+  document.body.appendChild(s);
+}
+function buildPages(text, size) {
+  const pages = []; let i = 0;
+  while (i < text.length) {
+    let end = Math.min(text.length, i + size);
+    if (end < text.length) { const nl = text.lastIndexOf("\n", end); if (nl > i + size * 0.6) end = nl + 1; }
+    pages.push(text.slice(i, end)); i = end;
+  }
+  return pages;
+}
+let readSaveAt = 0;
+function saveReadPos() {
+  if (!S.read || !S.commit) return;
+  DB.read = DB.read || {};
+  DB.read[S.read.id] = { page: S.read.page, pos: S.commit.pos, pages: S.read.pages.length };
+  saveDB();
+}
+function touchRead() {
+  if (!S.read) return;
+  const now = Date.now();
+  if (now - readSaveAt > 1200) { readSaveAt = now; saveReadPos(); }
+}
+function speakChar(ch) {
+  if (!/[\u4e00-\u9fffA-Za-z]/.test(ch)) return;
+  const lang = (S.readInfo && S.readInfo.lang === "en") ? "en-US" : "zh-CN";
+  if (window.AndroidBridge && AndroidBridge.speakChar) { try { AndroidBridge.speakChar(ch, lang, DB.s.rate); } catch (e) {} return; }
+  if (!("speechSynthesis" in window)) return;
+  try {
+    const u = new SpeechSynthesisUtterance(ch);
+    u.lang = lang; u.rate = DB.s.rate;
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+function openRead(id) {
+  const info = (window.READ_META || []).find(x => x.id === id);
+  if (!info) return;
+  loadReadText(info, text => {
+    if (!text) { toast("文本为空"); return; }
+    const pages = buildPages(text, info.kind === "novel" ? 1800 : 2400);
+    const pr = (DB.read || {})[id] || {};
+    const page = Math.min(pr.page || 0, pages.length - 1);
+    if (info.kind === "article" && window.READ_PY && READ_PY[info.id]) { startReadPinyin(info, pages, page, pr.pos || 0); return; }
+    S.readInfo = info;
+    S.read = { id, kind: info.kind, pages, page, novel: info.kind === "novel" };
+    startArticle({ id: "read_" + id, name: info.name, lang: info.lang || "zh", kind: "article", text: pages[page] });
+    const pos = Math.min(pr.pos || 0, pages[page].length);
+    if (pos > 0) {
+      S.commit.pos = pos;
+      paintCommit(0, pos);
+      $("#progText").textContent = pos + " / " + pages[page].length;
+      $("#bar").style.width = Math.min(100, pos / pages[page].length * 100) + "%";
+    }
+    saveReadPos();
+    toast("共 " + pages.length + " 页 · 从第 " + (page + 1) + " 页开始");
+  });
+}
+function renderReadPage(text) {
+  const box = $("#articleBox");
+  box.hidden = false;
+  box.className = "article zh";
+  box.style.maxHeight = "26vh";
+  box.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  S.readSpans = []; S.readCjk = [];
+  const pys = ((window.READ_PY && READ_PY[S.read.id]) || "").split(/\s+/).filter(Boolean);
+  let pi = S.read.offset || 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const sp = document.createElement("span");
+    sp.className = "ac"; sp.textContent = ch;
+    frag.appendChild(sp); S.readSpans.push(sp);
+    if (/[\u4e00-\u9fff]/.test(ch)) {
+      S.readCjk.push({ ch, py: pys[pi] || "", span: i });
+      pi++;
+    }
+  }
+  box.appendChild(frag);
+  box.scrollTop = 0;
+}
+function paintReadPage() {
+  const cur = S.readCjk[S.read.pos];
+  const cs = cur ? cur.span : 1e9;
+  for (let i = 0; i < S.readSpans.length; i++) {
+    S.readSpans[i].classList.toggle("done", i < cs);
+    S.readSpans[i].classList.toggle("cur", i === cs);
+  }
+  if (cur && S.readSpans[cs]) { try { S.readSpans[cs].scrollIntoView({ block: "nearest" }); } catch (e) {} }
+}
+function updateReadProgress() {
+  const total = S.readCjk.length;
+  $("#progText").textContent = Math.min(S.read.pos + 1, total) + " / " + total;
+  $("#bar").style.width = Math.min(100, S.read.pos / total * 100) + "%";
+}
+function saveReadPos2() {
+  if (!S.read) return;
+  DB.read = DB.read || {};
+  DB.read[S.read.id] = { page: S.read.page, pos: S.read.pos, pages: S.read.pages.length };
+  saveDB();
+}
+function startReadPinyin(info, pages, page, pos) {
+  const prior = pages.slice(0, page).join("");
+  const offset = Array.from(prior).filter(c => /[\u4e00-\u9fff]/.test(c)).length;
+  S.mode = "article"; S.lang = "zh"; S.engine = "letter";
+  S.readPinyin = true; S.readInfo = info;
+  S.read = { id: info.id, kind: "article", pages, page, offset, pos: pos || 0, novel: false };
+  S.tier = { id: "read_" + info.id, name: info.name };
+  S.queue = []; S.qi = 0;
+  S.correct = 0; S.errors = 0; S.combo = 0; S.maxCombo = 0; S.wrongSet = [];
+  S.started = false; S.t0 = 0; S.elapsed = 0; S.done = false;
+  $("#tierName").textContent = info.name;
+  $("#togglePy").style.display = "none";
+  $("#actions").style.display = "";
+  $("#replay").style.display = "";
+  $("#skip").style.display = "";
+  $("#skip").style.textContent = "跳过此字";
+  show("play");
+  $("#wordBox").hidden = false;
+  $("#articleBox").hidden = false;
+  $("#imeBox").hidden = true;
+  renderReadPage(pages[page]);
+  startReadChar(S.read.pos);
+  renderHome();
+}
+function startReadChar(k) {
+  const total = S.readCjk.length;
+  if (k >= total) { saveReadPos2(); return finish(); }
+  S.read.pos = k;
+  const item = S.readCjk[k];
+  S.item = [item.ch, item.py || ""];
+  S.idx = 0; S.curErrs = 0; S.done = false;
+  build();
+  paintReadPage();
+  updateReadProgress();
+  say(item.ch, "zh-CN");
+}
+function completeReadChar() {
+  if (S.done) return;
+  S.done = true;
+  S.combo++;
+  S.maxCombo = Math.max(S.maxCombo, S.combo);
+  beep(true);
+  const k = S.read.pos;
+  saveReadPos2();
+  setTimeout(() => {
+    if (S.screen !== "play" || !S.readPinyin) return;
+    S.done = false;
+    startReadChar(k + 1);
+  }, 160);
+}
+function nextReadPage() {
+  const r = S.read;
+  if (!r) return finish();
+  if (r.page + 1 >= r.pages.length) return finishArticle();
+  saveReadPos();
+  r.page++;
+  const info = S.readInfo;
+  startArticle({ id: "read_" + r.id, name: info.name, lang: info.lang || "zh", kind: "article", text: r.pages[r.page] });
+  saveReadPos();
+  toast("第 " + (r.page + 1) + " / " + r.pages.length + " 页");
+}
+function randomPool() {
+  const map = charPinyinMap();
+  const out = new Map();
+  for (const [c, p] of map) out.set(c, p);
+  for (const raw of (DB.chars || [])) {
+    const [c0, p0] = String(raw).split(/[|｜]/);
+    const ch = Array.from((c0 || "").trim())[0];
+    if (!ch) continue;
+    const p = (p0 || "").trim() || map.get(ch) || "";
+    if (p) out.set(ch, p);
+  }
+  return { pool: Array.from(out.entries()), base: map.size };
+}
+function renderRandomHome() {
+  const { pool, base } = randomPool();
+  const p = DB.p["rnd"] || {};
+  $("#lede").textContent = "随机出字 · 先读一遍，再打拼音 · 每组 " + DB.s.group + " 个";
+  $("#grid").innerHTML = `
+    <div class="card" data-random>
+      <div class="row"><span class="cname">开始随机字</span><span class="pill">${pool.length} 个字</span></div>
+      <div class="cdesc">随机抽一个常用字，先朗读，再像词语一样打拼音。</div>
+      <div class="cmeta"><span>内置 ${base} · 自定义 ${(DB.chars || []).length}</span><span>最高 ${p.best || 0} 键/分</span></div>
+    </div>
+    <div class="card add" id="impChar">＋ 导入我的字（加进字池）</div>`;
+  $("[data-random]").addEventListener("click", startRandom);
+  $("#impChar").addEventListener("click", () => openImport("chars"));
+  if ((DB.chars || []).length) {
+    $("#grid").insertAdjacentHTML("beforeend", `<div class="card add" id="clearChars">清空自定义字（${(DB.chars || []).length} 个）</div>`);
+    $("#clearChars").addEventListener("click", () => {
+      if (!confirm("清空自己导入的字？内置字不受影响。")) return;
+      DB.chars = []; saveDB(); renderHome();
+    });
+  }
+}
+function startRandom() {
+  const { pool } = randomPool();
+  if (pool.length < 5) { toast("字池太小，先导入一些字。"); return; }
+  const arr = pool.slice();
+  for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+  const n = Math.min(Math.max(10, DB.s.group), pool.length);
+  const t = { id: "rnd", name: "随机字", lang: "zh", kind: "word", words: arr.slice(0, n) };
+  const p = DB.p["rnd"] || (DB.p["rnd"] = { words: {}, cursor: 0, best: 0, runs: 0 });
+  startLetter(t, p);
+}
+
+/* ---------- 出题 ---------- */
+function startTier(id) {
+  const t = allTiers(S.mode).find(x => x.id === id);
+  if (!t) return;
+  S.read = null; S.readInfo = null; S.readPinyin = false;
+  $("#articleBox").style.maxHeight = "";
+  S.tier = t;
+  const p = DB.p[id] || (DB.p[id] = { words: {}, cursor: 0, best: 0, runs: 0 });
+  if (t.kind === "article") {
+    if (!t.text) { toast("这条文章没有内容，请删除后重新导入。"); return; }
+    try { return startArticle(t); }
+    catch (e) { toast("文章加载失败：" + e.message + "。请删除后重新导入。"); return; }
+  }
+  if (t.input === "ime") return startImeWords(t, p);
+  startLetter(t, p);
+}
+function startLetter(t, p) {
+  let list = t.words.map(w => w);
+  if (DB.s.order === "random") {
+    for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+  } else {
+    const n = list.length, c = (p.cursor || 0) % n;
+    list = list.slice(c).concat(list.slice(0, c));
+  }
+  if (DB.s.onlyNew) {
+    list = list.filter(w => (p.words[w[0]] || 0) < 2);
+    if (!list.length) { toast("这一档的词都已经掌握了，先关掉「只练未掌握」再练。"); return; }
+  }
+  list = list.slice(0, Math.max(1, DB.s.group));
+  resetRun();
+  S.queue = list;
+  S.engine = "letter";
+  S.lang = t.lang;
+  $("#tierName").textContent = t.name;
+  $("#togglePy").textContent = DB.s.pinyin ? "隐藏拼音" : "显示拼音";
+  $("#togglePy").style.display = S.lang === "zh" ? "" : "none";
+  $("#replay").style.display = "";
+  setStage("letter");
+  $("#actions").style.display = "";
+  $("#skip").style.visibility = "";
+  $("#skip").style.display = "";
+  $("#skip").textContent = "跳过";
+  show("play");
+  if (S.lang === "zh") setTimeout(ensureZhVoice, 60);
+  nextWord();
+  renderHome();
+}
+function nextWord() {
+  if (S.qi >= S.queue.length) return finish();
+  S.item = S.queue[S.qi];
+  S.idx = 0; S.curErrs = 0; S.done = false;
+  build();
+  $("#progText").textContent = (S.qi + 1) + " / " + S.queue.length;
+  $("#bar").style.width = "0%";
+  updateHUD();
+  say(S.item[0], S.lang === "zh" ? "zh-CN" : "en-US");
+}
+/* ---------- 输入法 / 文章模式 ---------- */
+function setStage(kind) {
+  const letter = kind === "letter";
+  $("#wordBox").hidden = !letter;
+  $("#articleBox").hidden = letter;
+  $("#imeBox").hidden = letter;
+  if (letter) { $("#articleBox").innerHTML = ""; try { $("#imeBox").blur(); } catch (e) {} }
+}
+function resetRun() {
+  Object.assign(S, {
+    queue: [], qi: 0, correct: 0, errors: 0, combo: 0, maxCombo: 0,
+    wrongSet: [], started: false, t0: 0, elapsed: 0, done: false,
+    engine: "letter", commitMode: null, commit: null, lastSentence: ""
+  });
+  clearTimeout(S.doneTimer);
+}
+function focusIme() {
+  const b = $("#imeBox");
+  b.value = "";
+  b.hidden = false;
+  try { b.focus(); } catch (e) {}
+}
+function renderCommit(text, lang, big) {
+  const box = $("#articleBox");
+  box.hidden = false;
+  box.className = "article " + (lang === "zh" ? "zh" : "en") + (big ? " big" : "");
+  box.innerHTML = "";
+  S.commit.spans = [];
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < text.length; i++) {
+    const s = document.createElement("span");
+    s.className = "ac" + (i === 0 ? " cur" : "");
+    s.textContent = text[i];
+    frag.appendChild(s);
+    S.commit.spans.push(s);
+  }
+  box.appendChild(frag);
+  box.scrollTop = 0;
+}
+function paintCommit(from, to) {
+  const c = S.commit, spans = c.spans;
+  for (let i = from; i < to && i < spans.length; i++) {
+    spans[i].classList.remove("bad", "cur");
+    spans[i].classList.add("done");
+  }
+  const sp = spans[c.pos];
+  if (sp) {
+    sp.classList.add("cur");
+    const box = $("#articleBox");
+    const r = sp.getBoundingClientRect(), br = box.getBoundingClientRect();
+    if (r.top < br.top + 30) box.scrollTop += r.top - br.top - 30;
+    else if (r.bottom > br.bottom - 30) box.scrollTop += r.bottom - br.bottom + 30;
+  }
+}
+function flashCommitBad() {
+  const s = S.commit && S.commit.spans[S.commit.pos];
+  if (!s) return;
+  s.classList.add("bad");
+  setTimeout(() => s.classList.remove("bad"), 320);
+}
+function startImeWords(t, p) {
+  let list = t.words.slice();
+  if (DB.s.order === "random") {
+    for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+  } else {
+    const n = list.length, c = (p.cursor || 0) % n;
+    list = list.slice(c).concat(list.slice(0, c));
+  }
+  if (DB.s.onlyNew) list = list.filter(w => (p.words[w[0]] || 0) < 2);
+  if (!list.length) { toast("这一组都已经掌握了，先在设置里关掉「只练未掌握」。"); return; }
+  list = list.slice(0, Math.max(1, DB.s.group));
+  resetRun();
+  Object.assign(S, { queue: list, qi: 0, engine: "commit", commitMode: "words", lang: t.lang, tier: t });
+  $("#tierName").textContent = t.name;
+  $("#togglePy").style.display = "none";
+  $("#replay").style.display = "";
+  $("#skip").style.visibility = "";
+  $("#skip").style.display = "";
+  $("#skip").textContent = "跳过";
+  $("#actions").style.display = "";
+  show("play");
+  setStage("commit");
+  if (S.lang === "zh") setTimeout(ensureZhVoice, 60);
+  nextImeWord();
+  renderHome();
+}
+function nextImeWord() {
+  if (S.qi >= S.queue.length) return finish();
+  S.item = S.queue[S.qi];
+  S.done = false;
+  S.itemErrs = 0;
+  const text = S.item[0];
+  S.commit = { text, pos: 0, spans: [], sents: [], si: 0, badLock: false };
+  renderCommit(text, S.lang, true);
+  $("#metaBox").innerHTML = '<span class="hintline">用输入法打出这个词 · 全对才算一次</span>';
+  $("#progText").textContent = (S.qi + 1) + " / " + S.queue.length;
+  $("#bar").style.width = "0%";
+  updateHUD();
+  focusIme();
+  say(text, S.lang === "zh" ? "zh-CN" : "en-US");
+}
+function completeImeWord() {
+  if (S.done) return;
+  S.done = true;
+  const clean = S.itemErrs === 0;
+  S.combo = clean ? S.combo + 1 : 0;
+  S.maxCombo = Math.max(S.maxCombo, S.combo);
+  const p = DB.p[S.tier.id] || (DB.p[S.tier.id] = { words: {}, cursor: 0, best: 0, runs: 0 });
+  p.words[S.item[0]] = clean ? Math.min(9, (p.words[S.item[0]] || 0) + 1) : 0;
+  p.cursor = (p.cursor || 0) + 1;
+  saveDB();
+  beep(true);
+  const box = $("#articleBox");
+  box.classList.remove("won"); void box.offsetWidth; box.classList.add("won");
+  clearTimeout(S.doneTimer);
+  S.doneTimer = setTimeout(() => { if (S.screen === "play") { S.qi++; nextImeWord(); } }, 320);
+}
+function startArticle(t) {
+  resetRun();
+  const text = t.text;
+  const sents = splitSentences(text);
+  Object.assign(S, {
+    tier: t, lang: t.lang, engine: "commit", commitMode: "article",
+    commit: { text, pos: 0, spans: [], sents, si: 0, badLock: false }
+  });
+  $("#tierName").textContent = t.name;
+  $("#togglePy").style.display = "none";
+  $("#actions").style.display = "";
+  $("#replay").style.display = "";
+  $("#skip").style.visibility = "";
+  $("#skip").textContent = "跳过本句";
+  show("play");
+  setStage("commit");
+  renderCommit(text, t.lang, false);
+  $("#metaBox").innerHTML = '<span class="hintline">' +
+    (t.lang === "zh" ? "用输入法照着打 · 每打完一句读一遍" : "照着打 · 每打完一句读一遍") + '</span>';
+  $("#progText").textContent = "0 / " + text.length;
+  $("#bar").style.width = "0%";
+  updateHUD();
+  focusIme();
+  if (S.lang === "zh") setTimeout(ensureZhVoice, 60);
+  renderHome();
+}
+function checkSentences() {
+  const c = S.commit;
+  while (c.si < c.sents.length && c.pos >= c.sents[c.si].e) {
+    const s = c.sents[c.si];
+    S.lastSentence = c.text.slice(s.s, s.e).trim();
+    say(S.lastSentence, S.lang === "zh" ? "zh-CN" : "en-US");
+    c.si++;
+  }
+}
+function finishArticle() {
+  if (S.done) return;
+  S.done = true;
+  beep(true);
+  finish();
+}
+function skipSentence() {
+  const c = S.commit;
+  if (!c) return;
+  const idx = c.sents.findIndex(s => c.pos < s.e);
+  if (idx < 0) { finishArticle(); return; }
+  const s = c.sents[idx];
+  for (let i = c.pos; i < s.e; i++) {
+    const sp = c.spans[i];
+    if (sp) { sp.classList.remove("bad", "cur"); sp.classList.add("done"); }
+  }
+  c.pos = s.e; c.si = Math.max(c.si, idx + 1); c.badLock = false;
+  $("#imeBox").value = "";
+  if (c.spans[c.pos]) c.spans[c.pos].classList.add("cur");
+  $("#progText").textContent = c.pos + " / " + c.text.length;
+  $("#bar").style.width = Math.min(100, c.pos / c.text.length * 100) + "%";
+  updateHUD();
+  if (c.pos >= c.text.length) finishArticle();
+}
+function commitInput() {
+  const box = $("#imeBox"), c = S.commit;
+  if (!c || S.done) return;
+  const v = box.value;
+  if (!v) return;
+  if (!S.started) { S.started = true; S.t0 = performance.now(); }
+  const target = c.text.slice(c.pos, c.pos + v.length);
+  if (v === target) {
+    const from = c.pos;
+    c.pos += v.length;
+    S.correct += v.length;
+    c.badLock = false;
+    const val = v;
+    setTimeout(() => { if (box.value === val) box.value = ""; }, 0);
+    paintCommit(from, c.pos);
+    if (S.commitMode === "words") {
+      if (c.pos >= c.text.length) completeImeWord();
+    } else {
+      if (S.read && S.read.novel) { for (const ch of v) speakChar(ch); }
+      else checkSentences();
+      touchRead();
+      $("#progText").textContent = c.pos + " / " + c.text.length;
+      $("#bar").style.width = Math.min(100, c.pos / c.text.length * 100) + "%";
+      if (c.pos >= c.text.length) { if (S.read) nextReadPage(); else finishArticle(); }
+    }
+    updateHUD();
+  } else {
+    if (!c.badLock) {
+      c.badLock = true; S.errors++; S.itemErrs = (S.itemErrs || 0) + 1; S.combo = 0;
+      if (S.commitMode === "words" && !S.wrongSet.includes(c.text)) S.wrongSet.push(c.text);
+    }
+    flashCommitBad();
+    beep(false);
+    updateHUD();
+  }
+}
+
+function build() {
+  const box = $("#wordBox"), meta = $("#metaBox");
+  box.innerHTML = ""; meta.innerHTML = ""; S.cells = [];
+  if (S.lang === "zh") {
+    const word = S.item[0], py = S.item[1] || "";
+    const chars = Array.from(word);
+    const syls = py.trim().split(/\s+/).filter(Boolean);
+    let ti = 0;
+    const ok = syls.length === chars.length;
+    syls.forEach((syl, si) => {
+      const wrap = document.createElement("span"); wrap.className = "syl";
+      const hz = document.createElement("span"); hz.className = "hz";
+      hz.textContent = ok ? chars[si] : "";
+      const pyEl = document.createElement("span"); pyEl.className = "py";
+      for (const ch of syl) {
+        const b = document.createElement("span"); b.className = "lt"; b.textContent = ch;
+        b.dataset.ti = ti; pyEl.appendChild(b);
+        S.cells.push({ el: b, ti: ti++, syl: si });
+      }
+      wrap.append(hz, pyEl); box.appendChild(wrap);
+      if (si < syls.length - 1) ti++;
+    });
+    S.target = syls.map(toAscii).join(" ");
+    if (!ok) {
+      const realChars = document.createElement("div"); realChars.className = "meta";
+      realChars.innerHTML = `<span class="mean">${esc(word)}</span>`;
+      meta.appendChild(realChars);
+    } else {
+      meta.innerHTML = '<span class="hintline">只打字母 · 空格自动跳过</span>';
+    }
+  } else {
+    const word = String(S.item[0]).toLowerCase();
+    S.target = word;
+    const wrap = document.createElement("span");
+    wrap.style.display = "flex"; wrap.style.gap = "2px";
+    wrap.style.flexWrap = "wrap"; wrap.style.justifyContent = "center";
+    Array.from(word).forEach((ch, i) => {
+      const b = document.createElement("span"); b.className = "lt en"; b.textContent = ch;
+      b.dataset.ti = i; wrap.appendChild(b);
+      S.cells.push({ el: b, ti: i, syl: 0 });
+    });
+    box.appendChild(wrap);
+    meta.innerHTML = `<span class="ipa">${esc(S.item[1] || "")}</span><span class="mean">${esc(S.item[2] || "")}</span>`;
+  }
+  box.classList.toggle("hidepy", !DB.s.pinyin);
+  paint();
+}
+function curCell() {
+  return S.cells.find(c => c.ti === S.idx) || S.cells.find(c => c.ti > S.idx) || null;
+}
+function paint() {
+  const idx = S.idx;
+  const cc = curCell();
+  for (const c of S.cells) {
+    c.el.classList.toggle("done", c.ti < idx);
+    c.el.classList.toggle("cur", c === cc);
+  }
+  if (S.lang === "zh") {
+    const syls = $$(".syl", $("#wordBox"));
+    syls.forEach((el, si) => {
+      const own = S.cells.filter(c => c.syl === si);
+      const last = own.length ? own[own.length - 1].ti : -1;
+      el.classList.toggle("on", idx > last);
+    });
+  }
+}
+function updateHUD() {
+  const mins = S.elapsed / 60000;
+  const total = S.correct + S.errors;
+  $("#hSpeed").textContent = mins > 0.02 ? Math.round(S.correct / mins) : 0;
+  $("#hAcc").textContent = total ? Math.round(S.correct / total * 100) : 100;
+  $("#hCombo").textContent = S.combo;
+  $("#hTime").textContent = fmtTime(S.elapsed);
+}
+function flashBad() {
+  const c = curCell();
+  if (!c) return;
+  c.el.classList.add("bad");
+  setTimeout(() => c.el.classList.remove("bad"), 260);
+}
+
+/* ---------- 输入 ---------- */
+document.addEventListener("keydown", e => {
+  if (S.screen !== "play") return;
+  if (e.key === "Escape") { e.preventDefault(); backHome(); return; }
+  if (S.engine === "commit") return;
+  if (e.key === "Enter") { e.preventDefault(); replay(); return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (S.done) { if (/^[a-zA-Z ]$/.test(e.key)) e.preventDefault(); return; }
+  if (e.key.length !== 1 || !/[a-zA-Z ]/.test(e.key)) return;
+  e.preventDefault();
+  const ch = e.key.toLowerCase();
+  if (!S.started) { S.started = true; S.t0 = performance.now(); }
+  const r = step(S.target, S.idx, ch);
+  if (r.ok) {
+    if (ch !== " ") S.correct++;
+    S.idx = r.idx;
+    paint();
+    $("#bar").style.width = Math.min(100, S.idx / S.target.length * 100) + "%";
+    updateHUD();
+    if (S.idx >= S.target.length) completeWord();
+  } else {
+    S.errors++; S.curErrs++; S.combo = 0;
+    if (!S.wrongSet.includes(S.item[0])) S.wrongSet.push(S.item[0]);
+    flashBad(); beep(false); updateHUD();
+  }
+});
+$("#imeBox").addEventListener("input", e => { if (!e.isComposing) commitInput(); });
+$("#imeBox").addEventListener("paste", e => e.preventDefault());
+$("#stage").addEventListener("click", () => {
+  if (S.screen === "play" && S.engine === "commit") { try { $("#imeBox").focus(); } catch (e) {} }
+});
+function completeWord() {
+  if (S.readPinyin) return completeReadChar();
+  if (S.done) return;  S.done = true;
+  const clean = S.curErrs === 0;
+  S.combo = clean ? S.combo + 1 : 0;
+  S.maxCombo = Math.max(S.maxCombo, S.combo);
+  const p = DB.p[S.tier.id] || (DB.p[S.tier.id] = { words: {}, cursor: 0, best: 0, runs: 0 });
+  p.words[S.item[0]] = clean ? Math.min(9, (p.words[S.item[0]] || 0) + 1) : 0;
+  p.cursor = (p.cursor || 0) + 1;
+  saveDB();
+  beep(true);
+  paint();
+  const wb = $("#wordBox");
+  wb.classList.remove("won"); void wb.offsetWidth; wb.classList.add("won");
+  // 打完只响提示音；语音已经在出题时读过，下一题出现时再读下一题
+  clearTimeout(S.doneTimer);
+  S.doneTimer = setTimeout(() => { if (S.screen === "play") { S.qi++; nextWord(); } }, 300);
+}
+function finish() {
+  S.done = true;
+  clearTimeout(S.doneTimer);
+  const mins = S.elapsed / 60000;
+  const cpm = mins > 0.02 ? Math.round(S.correct / mins) : 0;
+  const total = S.correct + S.errors;
+  const acc = total ? Math.round(S.correct / total * 100) : 100;
+  const p = DB.p[S.tier.id] || (DB.p[S.tier.id] = { words: {}, cursor: 0, best: 0, runs: 0 });
+  p.runs = (p.runs || 0) + 1;
+  if (cpm > (p.best || 0)) p.best = cpm;
+  saveDB();
+  $("#mTitle").textContent = "「" + S.tier.name + "」本组完成";
+  $("#rSpeed").textContent = cpm;
+  $("#rAcc").textContent = acc;
+  $("#rCombo").textContent = S.maxCombo;
+  $("#rTime").textContent = fmtTime(S.elapsed);
+  $("#rWrong").innerHTML = S.commitMode === "article"
+    ? `共 ${S.commit.text.length} 字，错 ${S.errors} 处。`
+    : (S.wrongSet.length
+      ? "需要再看看： " + S.wrongSet.map(w => `<i>${esc(w)}</i>`).join("、")
+      : '<span style="color:#3fb950">全部一次打对，漂亮。</span>');
+  $("#modal").classList.remove("hidden");
+  renderHome();
+}
+function backHome() {
+  clearTimeout(S.doneTimer);
+  if (S.readPinyin) saveReadPos2(); else if (S.read) saveReadPos();
+  S.readPinyin = false;
+  $("#articleBox").style.maxHeight = "";
+  S.read = null; S.readInfo = null;
+  S.done = false;
+  S.engine = "letter";
+  $("#modal").classList.add("hidden");
+  try { $("#imeBox").blur(); } catch (e) {}
+  $("#imeBox").hidden = true;
+  $("#imeBox").value = "";
+  $("#articleBox").hidden = true;
+  $("#wordBox").hidden = false;
+  show("home");
+  renderHome();
+  stopSay();
+}
+function replay() {
+  if (S.commitMode === "article") {
+    if (S.lastSentence) say(S.lastSentence, S.lang === "zh" ? "zh-CN" : "en-US");
+    return;
+  }
+  if (!S.item) return;
+  say(S.item[0], S.lang === "zh" ? "zh-CN" : "en-US");
+}
+
+/* ---------- 计时 ---------- */
+S.timer = setInterval(() => {
+  if (S.screen === "play" && S.started && !S.done) {
+    S.elapsed = performance.now() - S.t0;
+    updateHUD();
+  }
+}, 200);
+
+/* ---------- 设置 ---------- */
+function applyTheme() {
+  document.documentElement.setAttribute("data-theme", DB.s.theme === "light" ? "light" : "dark");
+}
+let bgm = null, sessionMusic = "";
+function bgmSync() { if (bgm) bgm.volume = Math.max(0, Math.min(1, Number(DB.s.musicVol) || 0.3)); }
+function bgmStart() {
+  const src = DB.s.musicData || sessionMusic;
+  if (!src) { toast("先在设置里选一首背景音乐"); return; }
+  if (!bgm || bgm.dataset.src !== src) {
+    bgm = new Audio(src); bgm.dataset.src = src; bgm.loop = true;
+  }
+  bgmSync();
+  bgm.play().catch(() => {});
+}
+function bgmStop() { if (bgm) bgm.pause(); }
+function applyFontScale(k) {
+  k = Math.max(0.8, Math.min(1.8, Number(k) || 1));
+  document.documentElement.style.setProperty("--k", k);
+}
+function openSet(open) {
+  $("#setPanel").classList.toggle("hidden", !open);
+  if (open) { syncSetUI(); refreshVoices(); }
+}
+function syncSetUI() {
+  $("#setSound").checked = !!DB.s.sound;
+  $("#setVoice").checked = !!DB.s.voice;
+  $("#setPinyin").checked = !!DB.s.pinyin;
+  $("#setOnlyNew").checked = !!DB.s.onlyNew;
+  $("#setRate").value = DB.s.rate;
+  $("#rateVal").textContent = Number(DB.s.rate).toFixed(2);
+  $("#setFont").value = DB.s.fontScale;
+  $("#fontVal").textContent = Number(DB.s.fontScale).toFixed(2);
+  $("#setTheme").checked = DB.s.theme === "light";
+  $("#setOrient").value = DB.s.orientation || "landscape";
+  $("#bgmVol").value = DB.s.musicVol;
+  $("#bgmOn").checked = !!DB.s.musicOn;
+  $("#bgmName").textContent = DB.s.musicName || "未选择";
+  $("#setGroup").value = String(DB.s.group);
+  $("#groupVal").textContent = DB.s.group;
+  $("#setOrder").value = DB.s.order;
+  $("#setVoiceSel").value = DB.s.voiceName || "";
+}
+["setSound", "setVoice", "setPinyin", "setOnlyNew"].forEach(id => {
+  $("#" + id).addEventListener("change", e => {
+    const key = id.replace("set", ""); DB.s[key[0].toLowerCase() + key.slice(1)] = e.target.checked;
+    if (key === "pinyin") $("#wordBox").classList.toggle("hidepy", !DB.s.pinyin);
+    saveDB();
+  });
+});
+$("#setRate").addEventListener("input", e => {
+  DB.s.rate = parseFloat(e.target.value);
+  $("#rateVal").textContent = DB.s.rate.toFixed(2);
+  saveDB();
+});
+$("#setGroup").addEventListener("input", e => {
+  DB.s.group = parseInt(e.target.value, 10) || 20;
+  $("#groupVal").textContent = DB.s.group;
+  saveDB();
+});
+$("#setOrder").addEventListener("change", e => { DB.s.order = e.target.value; saveDB(); });
+$("#setFont").addEventListener("input", e => {
+  DB.s.fontScale = parseFloat(e.target.value);
+  applyFontScale(DB.s.fontScale);
+  $("#fontVal").textContent = DB.s.fontScale.toFixed(2);
+  saveDB();
+});
+$("#setTheme").addEventListener("change", e => {
+  DB.s.theme = e.target.checked ? "light" : "dark";
+  applyTheme(); saveDB();
+});
+$("#setOrient").addEventListener("change", e => {
+  DB.s.orientation = e.target.value; saveDB();
+  if (window.AndroidBridge && AndroidBridge.setOrientation) AndroidBridge.setOrientation(DB.s.orientation);
+});
+$("#bgmVol").addEventListener("input", e => {
+  DB.s.musicVol = parseFloat(e.target.value); bgmSync(); saveDB();
+});
+$("#bgmOn").addEventListener("change", e => {
+  DB.s.musicOn = e.target.checked; saveDB();
+  if (DB.s.musicOn) bgmStart(); else bgmStop();
+});
+$("#bgmFile").addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (f) {
+    const rd = new FileReader();
+    rd.onload = () => {
+      const url = String(rd.result || "");
+      if (url.length < 1500000) {
+        DB.s.musicData = url; DB.s.musicName = f.name; sessionMusic = "";
+      } else {
+        DB.s.musicData = ""; DB.s.musicName = f.name + "（本次有效）"; sessionMusic = url;
+        toast("音乐较大，只在本次有效");
+      }
+      DB.s.musicOn = true; $("#bgmOn").checked = true;
+      saveDB(); bgm = null; bgmStart();
+    };
+    rd.readAsDataURL(f);
+  }
+  e.target.value = "";
+});
+$("#setVoiceSel").addEventListener("change", e => { DB.s.voiceName = e.target.value; saveDB(); });
+$("#resetAll").addEventListener("click", () => {
+  if (!confirm("确定清空所有档位的练习记录？此操作不可撤销。")) return;
+  DB.p = {}; saveDB(); renderHome(); toast("记录已清空");
+});
+$("#openSet").addEventListener("click", () => openSet(true));
+$("#closeSet").addEventListener("click", () => openSet(false));
+
+/* ---------- 顶部/按钮 ---------- */
+$$("#modeTabs .tab").forEach(t => t.addEventListener("click", () => {
+  $$("#modeTabs .tab").forEach(x => x.classList.toggle("on", x === t));
+  S.mode = t.dataset.m;
+  if (S.screen === "play") { clearTimeout(S.doneTimer); $("#modal").classList.add("hidden"); }
+  show("home"); renderHome();
+}));
+$("#back").addEventListener("click", backHome);
+$("#skip").addEventListener("click", () => {
+  if (S.screen !== "play" || S.done) return;
+  clearTimeout(S.doneTimer);
+  if (S.readPinyin) {
+    S.done = true;
+    S.read.pos = Math.min(S.read.pos + 1, S.readCjk.length);
+    saveReadPos2(); S.done = false;
+    startReadChar(S.read.pos);
+    return;
+  }
+  if (S.engine === "commit") {
+    if (S.commitMode === "article") { skipSentence(); return; }
+    S.errors++; S.done = true; saveSkip(); S.qi++;
+    setTimeout(nextImeWord, 60);
+    return;
+  }
+  if (!S.wrongSet.includes(S.item[0])) S.wrongSet.push(S.item[0]);
+  S.errors++; saveSkip();
+  S.qi++; nextWord();
+});
+function saveSkip() {
+  const p = DB.p[S.tier.id]; if (!p) return;
+  p.words[S.item[0]] = 0; p.cursor = (p.cursor || 0) + 1; saveDB();
+}
+$("#replay").addEventListener("click", replay);
+$("#togglePy").addEventListener("click", () => {
+  DB.s.pinyin = !DB.s.pinyin; saveDB();
+  $("#wordBox").classList.toggle("hidepy", !DB.s.pinyin);
+  $("#togglePy").textContent = DB.s.pinyin ? "隐藏拼音" : "显示拼音";
+});
+$("#again").addEventListener("click", () => { $("#modal").classList.add("hidden"); startTier(S.tier.id); });
+$("#toHome").addEventListener("click", () => { $("#modal").classList.add("hidden"); backHome(); });
+
+/* ---------- 导入我的词库 ---------- */
+function normalizeArticle(text, lang) {
+  let t = String(text || "").replace(/\r\n?/g, "\n").replace(/\u00a0/g, " ");
+  if (lang === "en") {
+    t = t.replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/[—–]/g, "-").replace(/…/g, "...");
+  }
+  t = t.split("\n").map(s => s.trim()).filter(Boolean).join(lang === "zh" ? "" : " ");
+  if (lang === "en") t = t.replace(/\s+/g, " ").trim();
+  return t;
+}
+function splitSentences(text) {
+  const out = []; let start = 0;
+  const ends = "。！？!?；;\n";
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    let cut = ends.includes(ch);
+    if (!cut && ch === ".") {
+      const next = text[i + 1] || " ";
+      cut = /\s/.test(next) && !/\d/.test(text[i - 1] || "");
+    }
+    if (cut) {
+      let j = i + 1;
+      while (j < text.length && "”’\"'".includes(text[j])) j++;
+      out.push({ s: start, e: j });
+      start = j; i = j - 1;
+    }
+  }
+  if (start < text.length) out.push({ s: start, e: text.length });
+  const chunks = [];
+  for (const seg of out) {
+    if (seg.e - seg.s <= 60) { chunks.push(seg); continue; }
+    for (let k = seg.s; k < seg.e; k += 50) chunks.push({ s: k, e: Math.min(seg.e, k + 50) });
+  }
+  return chunks;
+}
+function parseImport(raw, kindChoice, langChoice) {
+  const text0 = String(raw || "").replace(/\r\n?/g, "\n").trim();
+  if (!text0) throw new Error("内容还是空的");
+  const lang = langChoice === "auto" ? (/[\u4e00-\u9fff]/.test(text0) ? "zh" : "en") : langChoice;
+  const lines = text0.split("\n").map(s => s.trim()).filter(Boolean);
+  let kind = kindChoice;
+  if (kind === "auto") {
+    if (lines.length && lines.every(l => Array.from(l).length === 1 && /[\u4e00-\u9fff]/.test(l))) kind = "chars";
+  }
+  if (kind === "auto") {
+    const marks = (text0.match(/[。！？!?；;.]/g) || []).length;
+    const longLine = lines.some(l => l.length > 20);
+    const prose = text0.length > 80 || (lines.length === 1 && /\s/.test(text0));
+    kind = (marks >= 1 || longLine || prose || lines.length > 60) ? "article" : "word";
+  }
+  if (kind === "chars") {
+    const out = new Map();
+    for (const line of lines) {
+      const mm = line.match(/^(.+?)\s*[|｜]\s*(.+)$/);
+      if (mm && /[\u4e00-\u9fff]/.test(mm[1])) {
+        const ch = Array.from(mm[1].trim())[0];
+        const py = mm[2].trim();
+        if (ch && py) out.set(ch, ch + "|" + py);
+      } else {
+        for (const ch of line) if (/[\u4e00-\u9fff]/.test(ch) && !out.has(ch)) out.set(ch, ch);
+      }
+    }
+    const chars = Array.from(out.values());
+    if (!chars.length) throw new Error("没有识别到汉字");
+    if (chars.length > 3000) throw new Error("字太多，先控制在 3000 个以内");
+    return { kind: "chars", lang: "zh", chars };
+  }
+  if (kind === "article") {
+    const text = normalizeArticle(text0, lang);
+    if (!text) throw new Error("没有解析到文字");
+    if (text.length > 20000) throw new Error("文章太长，先控制在 2 万字以内");
+    return { kind, lang, input: "ime", text };
+  }
+  const words = []; let withPy = 0, skipped = 0;
+  for (const line of lines) {
+    if (lang === "zh") {
+      const m = line.match(/^(.+?)\s*[|｜\t]\s*([a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜüńňǹḿ\s']+)$/);
+      if (m && /[\u4e00-\u9fff]/.test(m[1])) {
+        words.push([m[1].trim(), m[2].trim().replace(/\s+/g, " ")]);
+        withPy++;
+      } else {
+        words.push([line]);
+      }
+    } else {
+      const parts = line.split(/[|｜\t]/).map(s => s.trim());
+      const w = (parts[0] || "").toLowerCase();
+      if (!/^[a-z]+$/.test(w)) { skipped++; continue; }
+      words.push([w, parts[1] || "", parts[2] || ""]);
+    }
+  }
+  if (!words.length) throw new Error("没有解析到有效词条");
+  if (words.length > 2000) throw new Error("词条太多，先控制在 2000 条以内");
+  const input = (lang === "zh" && withPy === words.length) ? "letter" : "ime";
+  if (input === "letter") {
+    for (const w of words) {
+      if (!w[1]) throw new Error("缺拼音：" + w[0]);
+      if (w[1].split(/\s+/).length !== Array.from(w[0]).length) throw new Error("拼音音节和字数对不上：" + w[0]);
+      if (/[^a-z]/.test(toAscii(w[1]).replace(/ /g, ""))) throw new Error("拼音里有不认识的字符：" + w[0]);
+    }
+  } else if (lang === "zh") {
+    for (const w of words) w.length = 1;
+  }
+  return { kind, lang, input, words, skipped };
+}
+function describeImport(r) {
+  if (r.kind === "chars") return `识别：自定义字 ${r.chars.length} 个（会加入随机字池）`;
+  if (r.kind === "article") {
+    return `识别：${r.lang === "zh" ? "中文" : "英文"}文章 · ${r.text.length} 字 · ${splitSentences(r.text).length} 句 · 输入法模式`;
+  }
+  return `识别：${r.lang === "zh" ? "中文" : "英文"}词组 · ${r.words.length} 条 · ${r.input === "letter" ? "逐字母输入" : "输入法输入"}` +
+    (r.skipped ? ` · 跳过 ${r.skipped} 条不支持的` : "");
+}
+function updateImpPreview() {
+  const el = $("#impHint"), raw = $("#impText").value;
+  if (!raw.trim()) { el.textContent = ""; return; }
+  try {
+    const r = parseImport(raw, $("#impKind").value, $("#impLang").value);
+    el.textContent = describeImport(r);
+    el.style.color = "#7ee787";
+  } catch (e) {
+    el.textContent = "✗ " + e.message;
+    el.style.color = "#f85149";
+  }
+}
+function openImport(kind) {
+  $("#importModal").classList.remove("hidden");
+  $("#impName").value = "我的词库 " + ((DB.custom || []).length + 1);
+  $("#impText").value = "";
+  $("#impKind").value = kind || "auto";
+  $("#impLang").value = "auto";
+  updateImpPreview();
+  setTimeout(() => { try { $("#impText").focus(); } catch (e) {} }, 30);
+}
+function saveImport() {
+  try {
+    const r = parseImport($("#impText").value, $("#impKind").value, $("#impLang").value);
+    if (r.kind === "chars") {
+      const m = new Map();
+      for (const raw of [...(DB.chars || []), ...r.chars]) {
+        const c = String(raw).split(/[|｜]/)[0];
+        if (c) m.set(c, raw);
+      }
+      DB.chars = Array.from(m.values()).slice(0, 5000);
+      saveDB();
+      $("#importModal").classList.add("hidden");
+      renderHome();
+      toast("已加入字池 " + r.chars.length + " 个字");
+      return;
+    }
+    const name = ($("#impName").value || "").trim() || ("我的词库 " + ((DB.custom || []).length + 1));
+    const rec = { id: "c" + Date.now().toString(36), name, lang: r.lang, kind: r.kind, input: r.input };
+    if (r.kind === "word") rec.words = r.words; else rec.text = r.text;
+    if (!validCustom(rec)) throw new Error("导入内容不完整，请重试");
+    const trial = { ...DB, custom: [...(DB.custom || []), rec] };
+    if (JSON.stringify(trial).length > 2000000) { toast("本地存储快满了，先删掉一些旧词库再导入。"); return; }
+    DB.custom = trial.custom;
+    saveDB();
+    $("#importModal").classList.add("hidden");
+    renderHome();
+    toast("已导入：" + name);
+  } catch (e) {
+    toast(e.message);
+  }
+}
+function delCustom(id) {
+  const rec = (DB.custom || []).find(c => c.id === id);
+  if (!rec) return;
+  if (!confirm("删除「" + rec.name + "」以及它的练习记录？")) return;
+  DB.custom = (DB.custom || []).filter(c => c.id !== id);
+  delete DB.p[id];
+  saveDB();
+  renderHome();
+  toast("已删除");
+}
+$("#impText").addEventListener("input", updateImpPreview);
+$("#impKind").addEventListener("change", updateImpPreview);
+$("#impLang").addEventListener("change", updateImpPreview);
+$("#impFile").addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { $("#impText").value = String(rd.result || ""); updateImpPreview(); };
+  rd.readAsText(f, "utf-8");
+  e.target.value = "";
+});
+$("#impSave").addEventListener("click", saveImport);
+$("#impCancel").addEventListener("click", () => $("#importModal").classList.add("hidden"));
+$("#importModal").addEventListener("click", e => { if (e.target.id === "importModal") $("#importModal").classList.add("hidden"); });
+
+/* ---------- 启动 ---------- */
+applyTheme();
+applyFontScale(DB.s.fontScale);
+if (!window.AndroidBridge) $("#orientField").style.display = "none";
+if (window.AndroidBridge && AndroidBridge.setOrientation) AndroidBridge.setOrientation(DB.s.orientation || "landscape");
+if (DB.s.musicData) { bgm = new Audio(DB.s.musicData); bgm.loop = true; bgm.volume = Number(DB.s.musicVol) || 0.3; }
+document.addEventListener("pointerdown", function () { if (DB.s.musicOn && (DB.s.musicData || sessionMusic)) bgmStart(); }, { once: true });
+renderHome();
+const deep = new URLSearchParams(location.search).get("tier");
+if (deep) {
+  S.mode = deep.startsWith("en") ? "en" : "zh";
+  $$("#modeTabs .tab").forEach(x => x.classList.toggle("on", x.dataset.m === S.mode));
+  renderHome();
+  if (tiersOf(S.mode).some(t => t.id === deep)) startTier(deep);
+}
+
+if ("speechSynthesis" in window) {
+  speechSynthesis.addEventListener("voiceschanged", refreshVoices);
+  setTimeout(refreshVoices, 260);
+}
+
+/* ---------- 自检（?selftest=1） ---------- */
+if (new URLSearchParams(location.search).has("selftest")) {
+  const t = [];
+  const eq = (name, got, want) => t.push({ name, ok: JSON.stringify(got) === JSON.stringify(want), got, want });
+  eq("ascii-tone", toAscii("shí shì"), "shi shi");
+  eq("ascii-ü", toAscii("lǜ"), "lv");
+  eq("step-basic", step("hu jia", 0, "h"), { idx: 1, ok: true });
+  eq("step-skip-space", step("hu jia", 2, "j"), { idx: 4, ok: true });
+  eq("step-wrong", step("hu jia", 2, "x").ok, false);
+  let i = 0, bad = 0;
+  for (const ch of "hujiahuwei") { const r = step("hu jia hu wei", i, ch); if (!r.ok) bad++; i = r.idx; }
+  eq("step-full", [i, bad], [13, 0]);
+  const imp1 = parseImport("狐假虎威|hú jiǎ hǔ wèi\n画蛇添足|huà shé tiān zú", "auto", "auto");
+  eq("imp-zh-pinyin", [imp1.kind, imp1.lang, imp1.input, imp1.words.length], ["word", "zh", "letter", 2]);
+  const imp2 = parseImport("实事求是\n脚踏实地", "auto", "auto");
+  eq("imp-zh-ime", [imp2.kind, imp2.input, imp2.words.length], ["word", "ime", 2]);
+  const imp3 = parseImport("apple|ˈæpl|苹果\nbanana", "auto", "auto");
+  eq("imp-en", [imp3.kind, imp3.lang, imp3.input, imp3.words.length], ["word", "en", "letter", 2]);
+  const imp4 = parseImport("春天来了。柳树发芽了。燕子从南方飞回来了。", "auto", "auto");
+  eq("imp-article", [imp4.kind, imp4.lang, imp4.text.length], ["article", "zh", 22]);
+  eq("sents", splitSentences("我爱你。你好！").length, 2);
+  const problems = [];
+  for (const mode of ["zh", "en"]) {
+    for (const tier of tiersOf(mode)) {
+      const seen = new Set();
+      tier.words.forEach(w => {
+        if (seen.has(w[0])) problems.push(tier.id + " dup:" + w[0]);
+        seen.add(w[0]);
+        if (mode === "zh") {
+          if (!w[1]) problems.push(tier.id + " nopy:" + w[0]);
+          else if (Array.from(w[1].trim().split(/\s+/)).length !== Array.from(w[0]).length) problems.push(tier.id + " syl:" + w[0]);
+          if (/[^a-z]/.test(toAscii(w[1]).replace(/ /g, ""))) problems.push(tier.id + " ascii:" + w[0]);
+        } else {
+          if (!/^[a-z]+$/.test(w[0])) problems.push(tier.id + " word:" + w[0]);
+          if (!w[1]) problems.push(tier.id + " noipa:" + w[0]);
+        }
+      });
+      t.push({ name: "tier:" + tier.id, ok: true, count: tier.words.length });
+    }
+  }
+  t.push({ name: "data", ok: problems.length === 0, problems: problems.slice(0, 40) });
+  const allOk = t.every(x => x.ok);
+  document.title = allOk ? "SELFTEST-OK" : "SELFTEST-FAIL";
+  $("#selftest").textContent = JSON.stringify(t, null, 1);
+}
+</script>
+</body>
+</html>
